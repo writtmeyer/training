@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Gifts For Friends</string>
+
+    <string name="add_gift">Add gift</string>
 </resources>
