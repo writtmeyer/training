@@ -23,6 +23,9 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import de.openminds.training.giftsforfriends.data.Data;
+import de.openminds.training.giftsforfriends.domain.ContactInformation;
+
 public class FriendDetailActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,17 +33,15 @@ public class FriendDetailActivity extends Activity {
         setContentView(R.layout.activity_detail);
         long id = getIntent().getLongExtra("id", -1L);
         // we are not working with a db, so we simply cast to an int to fulfill the API of List:
-        PseudoData.ContactInformation info = PseudoData.getAllContactInformations().get((int)id - 1);
+        ContactInformation info = new Data(this).getAllContactData().get((int) id - 1);
         TextView friend = (TextView)findViewById(R.id.txt_name);
         friend.setText(info.name);
 
         // There's still no RecyclerView for gifts, so I simply
         // set the first gift - if there's any
         TextView giftName = (TextView)findViewById(R.id.txt_gift_name);
-        List<PseudoData.Gift> gifts = PseudoData.getAllGiftsForContact(id);
-        if (gifts != null && gifts.size() > 0) {
-            giftName.setText(gifts.get(0).name);
-        }
+
+        // since gifts are not part of the db yet, the list of gifts is not used either
     }
 }
 

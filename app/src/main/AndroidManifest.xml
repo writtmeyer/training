@@ -14,7 +14,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".FriendDetailActivity" />
-
+        <service android:name=".GiftlistService" />
     </application>
 
 </manifest>

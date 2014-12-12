@@ -25,14 +25,21 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import de.openminds.training.giftsforfriends.domain.ContactInformation;
+
 public class GiftlistAdapter extends RecyclerView.Adapter<GiftlistAdapter.GiftlistViewHolder> {
 
-    List<PseudoData.ContactInformation> items;
+    List<ContactInformation> items;
     View.OnClickListener listener;
 
-    public GiftlistAdapter(List<PseudoData.ContactInformation> items, View.OnClickListener listener) {
+    public GiftlistAdapter(List<ContactInformation> items, View.OnClickListener listener) {
         this.items = items;
         this.listener = listener;
+    }
+
+    public void swapData(List<ContactInformation> items) {
+        this.items = items;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -49,7 +56,7 @@ public class GiftlistAdapter extends RecyclerView.Adapter<GiftlistAdapter.Giftli
 
     @Override
     public void onBindViewHolder(GiftlistViewHolder giftlistViewHolder, int i) {
-        PseudoData.ContactInformation info = items.get(i);
+        ContactInformation info = items.get(i);
         giftlistViewHolder.txtGifts.setText(Integer.toString(info.noOfGifts)) ;
         giftlistViewHolder.txtName.setText(info.name);
         giftlistViewHolder.itemView.setTag(items.get(i));
