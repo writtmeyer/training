@@ -17,47 +17,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/container_single_giftlistitem"
-        android:orientation="horizontal"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview_giftlist"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/selectableItemBackground">
+        android:layout_height="match_parent"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp" />
 
-        <ImageView
-            android:id="@+id/img_avatar"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:src="@drawable/ic_launcher"
-            android:layout_margin="16dp"
-            android:contentDescription="" />
-
-        <LinearLayout
-            android:id="@+id/container_giftlistinformation"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="16dp"
-            android:layout_marginEnd="16dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/txt_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                tools:text="Beate" />
-
-            <TextView
-                android:id="@+id/txt_gifts"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                tools:text="5 gifts" />
-        </LinearLayout>
-    </LinearLayout>
 
     <ImageButton
         android:id="@+id/fab_add"

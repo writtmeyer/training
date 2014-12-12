@@ -17,13 +17,10 @@
 package de.openminds.training.giftsforfriends;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -34,22 +31,26 @@ public class FriendsListActivity extends Activity implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_giftlist);
-        findViewById(R.id.container_single_giftlistitem).setOnClickListener(this);
-        // test data; eventually this will be replaced with database data
-        // since this will be replaced anyway, text is _not_ moved to strings.xml
-        TextView txtName = (TextView)findViewById(R.id.txt_name);
-        txtName.setText("Beate");
-        TextView txtGifts = (TextView)findViewById(R.id.txt_gifts);
-        txtGifts.setText("5 gifts");
+
+        // RecyclerView - you need to set the adapter and a layoutmanager
+        RecyclerView rv = (RecyclerView)findViewById(R.id.recyclerview_giftlist);
+        rv.setAdapter(new GiftlistAdapter(PseudoData.getAllContactInformations(), this));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(rv.getContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        rv.setLayoutManager(layoutManager);
+
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.container_single_giftlistitem) {
-            // andere activity starten
-            Intent intent = new Intent(this, FriendDetailActivity.class);
-            intent.putExtra("id", 5);
-            startActivity(intent);
+            // start detail activity
+            PseudoData.ContactInformation info = (PseudoData.ContactInformation)v.getTag();
+            if (info != null) {
+                Intent intent = new Intent(this, FriendDetailActivity.class);
+                intent.putExtra("id", (info.id));
+                startActivity(intent);
+            }
         }
     }
 
