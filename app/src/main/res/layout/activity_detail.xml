@@ -38,6 +38,7 @@
             android:layout_gravity="bottom">
 
             <TextView
+                android:id="@+id/txt_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -50,17 +51,11 @@
     </FrameLayout>
 
     <TextView
+        android:id="@+id/txt_gift_name"
         android:layout_width="match_parent"
         android:layout_height="32dp"
         android:layout_margin="16dp"
-        tools:text="Konzertkarten"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_margin="16dp"
-        tools:text="Babysitter"
+        tools:text="Concert tickets"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </LinearLayout>
