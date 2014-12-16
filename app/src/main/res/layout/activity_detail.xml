@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="128dp"
             android:layout_margin="16dp"
-            android:src="@drawable/ic_launcher" />
+            android:src="@drawable/ic_person_black_96dp" />
 
         <FrameLayout
             android:layout_width="match_parent"

@@ -26,7 +26,7 @@
         android:id="@+id/img_avatar"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:src="@drawable/ic_launcher"
+        android:src="@drawable/ic_person_black_96dp"
         android:layout_margin="16dp"
         android:contentDescription="" />
 
