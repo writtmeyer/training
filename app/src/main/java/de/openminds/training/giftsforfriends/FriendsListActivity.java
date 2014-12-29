@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -44,7 +45,7 @@ import de.openminds.training.giftsforfriends.domain.ContactInformation;
 //
 /////////////////////////////////////////////
 
-public class FriendsListActivity extends Activity implements View.OnClickListener {
+public class FriendsListActivity extends FragmentActivity {
 
     private RecyclerView rv;
     private GiftlistAdapter adapter;
@@ -52,55 +53,17 @@ public class FriendsListActivity extends Activity implements View.OnClickListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        IntentFilter filter = new IntentFilter(Constants.ACTION_LISTRESULT);
-        LocalBroadcastManager.getInstance(this).registerReceiver(localReceiver, filter);
-        // start the service to retriev data:
-        Intent serviceIntent = new Intent(this, GiftlistService.class);
-        serviceIntent.setAction(GiftlistService.ACTION_LOAD_LIST);
-        this.startService(serviceIntent);
-
         setContentView(R.layout.activity_giftlist);
-
-        // RecyclerView - you need to set the adapter and a layoutmanager
-        // Kepp in mind. We load the data asynchronously and do not have
-        // it ready yet. Thus I had to add the adapter as a instance variable
-        // and add data later on.
-        rv = (RecyclerView)findViewById(R.id.recyclerview_giftlist);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(rv.getContext());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        rv.setLayoutManager(layoutManager);
-        adapter = new GiftlistAdapter(null, this);
-        rv.setAdapter(adapter);
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.container_single_giftlistitem) {
-            // start detail activity
-            ContactInformation info = (ContactInformation)v.getTag();
-            if (info != null) {
-                Intent intent = new Intent(this, FriendDetailActivity.class);
-                intent.putExtra("id", (info.id));
-                startActivity(intent);
-            }
+        if (savedInstanceState == null) {
+            // in case of config change the bundle is not null
+            // in that case Android takes care of reviving the fragment and
+            // you should not recreate it yourself
+            FriendsListFragment f = FriendsListFragment.newInstance();
+            getSupportFragmentManager().
+                    beginTransaction().
+                    replace(R.id.container_master_fragment, f).
+                    commit();
         }
     }
 
-    private void swapData(List<ContactInformation> infos) {
-        adapter.swapData(infos);
-    }
-
-    // The Receiver to get the result from the service
-    BroadcastReceiver localReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (Constants.ACTION_LISTRESULT.equals(intent.getAction())) {
-                List<ContactInformation> infos =
-                        intent.getParcelableArrayListExtra(Constants.KEY_GIFTLIST);
-                Log.v("training", "result: " + infos.get(0).name);
-                swapData(infos);
-            }
-        }
-    };
 }

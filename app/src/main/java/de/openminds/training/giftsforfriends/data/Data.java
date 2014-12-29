@@ -90,4 +90,32 @@ public class Data {
             }
         }
     }
+
+    public ContactInformation getDetail(long id) {
+        SQLiteDatabase db = null;
+        try {
+            db = dbHelper.getWritableDatabase();
+            String[] projection = new String[]{"_id", "name", "count"};
+            Cursor c = db.query("gift_contacts",
+                    projection,
+                    "_id = ?",                        // selection
+                    new String[]{Long.toString(id)},  // selectionArguments
+                    null,                             // groupBy
+                    null,                             // having
+                    null,                             // orderBy
+                    null                              // limit
+            );
+            if (c.moveToFirst()) {
+                ContactInformation contact =
+                        new ContactInformation(c.getLong(0), c.getString(1), c.getInt(2));
+                return contact;
+            }
+        }
+        finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+        return null;
+    }
 }

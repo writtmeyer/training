@@ -29,7 +29,7 @@ import de.openminds.training.giftsforfriends.domain.ContactInformation;
 public class GiftlistService extends IntentService {
 
     public static final String ACTION_LOAD_LIST = "loadList";
-    public static final String ACTION_SOME_OTHER_ACTION = "someOther";
+    public static final String ACTION_LOAD_DETAILS = "loadDetails";
 
     public GiftlistService() {
         super(GiftlistService.class.getName());
@@ -47,8 +47,8 @@ public class GiftlistService extends IntentService {
         }
         if (ACTION_LOAD_LIST.equals(action)) {
             doLoadList(intent);
-        } else if (ACTION_SOME_OTHER_ACTION.equals(action)) {
-            // so something
+        } else if (ACTION_LOAD_DETAILS.equals(action)) {
+            doLoadDetails(intent);
         } else {
             throw new IllegalArgumentException("Unknown action: " + action);
         }
@@ -69,6 +69,19 @@ public class GiftlistService extends IntentService {
         Intent broadCastIntent = new Intent();
         broadCastIntent.setAction(Constants.ACTION_LISTRESULT);
         broadCastIntent.putParcelableArrayListExtra(Constants.KEY_GIFTLIST, infos);
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
+        localBroadcastManager.sendBroadcast(broadCastIntent);
+    }
+
+    private void doLoadDetails(Intent intent) {
+        long id = intent.getLongExtra(Constants.KEY_ID, -1);
+        Log.v("training", "id: " + id);
+        Data data = new Data(this);
+        ContactInformation info = data.getDetail(id);
+        // transfer the result via broadcast:
+        Intent broadCastIntent = new Intent();
+        broadCastIntent.setAction(Constants.ACTION_DETAILRESULT);
+        broadCastIntent.putExtra(Constants.KEY_CONTACTINFO, info);
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
         localBroadcastManager.sendBroadcast(broadCastIntent);
     }

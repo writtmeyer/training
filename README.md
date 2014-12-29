@@ -27,4 +27,4 @@ It makes use of
  - Access to online resources
  - Content provider access
 
-*Please note:* This project is not complete in any way and cuts some corners to stay easy to grasps for Android beginners.
+*Please note:* This project is not complete in any way and cuts some corners to stay easy to grasp for Android beginners.

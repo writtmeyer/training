@@ -18,6 +18,10 @@ package de.openminds.training.giftsforfriends;
 
 public interface Constants {
 
+    String KEY_ID = "keyId";
     String KEY_GIFTLIST = "keyGiftlist";
+    String KEY_CONTACTINFO = "keyContactInfo";
     String ACTION_LISTRESULT = "actionListResult";
+    String ACTION_DETAILRESULT = "actionDetailResult";
+
 }

@@ -16,32 +16,22 @@
 
 package de.openminds.training.giftsforfriends;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.TextView;
+import android.support.v4.app.FragmentActivity;
 
-import java.util.List;
-
-import de.openminds.training.giftsforfriends.data.Data;
-import de.openminds.training.giftsforfriends.domain.ContactInformation;
-
-public class FriendDetailActivity extends Activity {
+public class FriendDetailActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        long id = getIntent().getLongExtra("id", -1L);
-        // we are not working with a db, so we simply cast to an int to fulfill the API of List:
-        ContactInformation info = new Data(this).getAllContactData().get((int) id - 1);
-        TextView friend = (TextView)findViewById(R.id.txt_name);
-        friend.setText(info.name);
-
-        // There's still no RecyclerView for gifts, so I simply
-        // set the first gift - if there's any
-        TextView giftName = (TextView)findViewById(R.id.txt_gift_name);
-
-        // since gifts are not part of the db yet, the list of gifts is not used either
+        if (savedInstanceState == null) {
+            long id = getIntent().getLongExtra("id", -1L);
+            FriendDetailFragment f = FriendDetailFragment.newInstance(id);
+            getSupportFragmentManager().
+                    beginTransaction().
+                    replace(R.id.container_detail_fragment, f).
+                    commit();
+        }
     }
 }
 
