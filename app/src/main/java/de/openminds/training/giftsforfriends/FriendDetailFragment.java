@@ -64,7 +64,12 @@ public class FriendDetailFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle b = getArguments();
-        detailId = b.getLong(Constants.KEY_ID, -1L);
+        if (savedInstanceState != null) {
+            detailId = savedInstanceState.getLong(Constants.KEY_ID, -1L);
+        }
+        else {
+            detailId = b.getLong(Constants.KEY_ID, -1L);
+        }
     }
 
     @Override
@@ -81,7 +86,12 @@ public class FriendDetailFragment extends Fragment{
         super.onResume();
         IntentFilter filter = new IntentFilter(Constants.ACTION_DETAILRESULT);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(localReceiver, filter);
-        // start the service to retriev data:
+        startDetailRetrieval();
+
+    }
+
+    private void startDetailRetrieval() {
+        // start the service to retrieve data:
         Intent serviceIntent = new Intent(getActivity(), GiftlistService.class);
         serviceIntent.putExtra(Constants.KEY_ID, detailId);
         serviceIntent.setAction(GiftlistService.ACTION_LOAD_DETAILS);
@@ -92,6 +102,17 @@ public class FriendDetailFragment extends Fragment{
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(localReceiver);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong(Constants.KEY_ID, detailId);
+    }
+
+    public void switchFriend(long id) {
+        this.detailId = id;
+        startDetailRetrieval();
     }
 
         // The Receiver to get the result from the service

@@ -45,14 +45,17 @@ import de.openminds.training.giftsforfriends.domain.ContactInformation;
 //
 /////////////////////////////////////////////
 
-public class FriendsListActivity extends FragmentActivity {
+public class FriendsListActivity extends FragmentActivity implements FriendsListFragment.FriendSelectedListener {
 
+    private static String DETAILS_FRAGMENT_TAG = "friendsDetailsTag";
     private RecyclerView rv;
     private GiftlistAdapter adapter;
+    private boolean isTwoPane = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isTwoPane = getResources().getBoolean(R.bool.two_pane);
         setContentView(R.layout.activity_giftlist);
         if (savedInstanceState == null) {
             // in case of config change the bundle is not null
@@ -66,4 +69,26 @@ public class FriendsListActivity extends FragmentActivity {
         }
     }
 
+    @Override
+    public void onFriendSelected(long id) {
+        if (isTwoPane) {
+            FriendDetailFragment f =
+                    (FriendDetailFragment)getSupportFragmentManager().findFragmentByTag(DETAILS_FRAGMENT_TAG);
+            if (f != null) {
+                f.switchFriend(id);
+            }
+            else {
+                f = FriendDetailFragment.newInstance(id);
+                getSupportFragmentManager().
+                        beginTransaction().
+                        replace(R.id.container_detail_fragment, f, DETAILS_FRAGMENT_TAG).
+                        commit();
+            }
+        }
+        else {
+            Intent intent = new Intent(this, FriendDetailActivity.class);
+            intent.putExtra("id", (id));
+            startActivity(intent);
+        }
+    }
 }

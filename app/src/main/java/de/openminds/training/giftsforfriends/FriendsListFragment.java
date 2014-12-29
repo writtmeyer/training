@@ -41,6 +41,11 @@ public class FriendsListFragment extends Fragment implements View.OnClickListene
 
     private RecyclerView rv;
     private GiftlistAdapter adapter;
+    private FriendSelectedListener listener;
+
+    public static interface FriendSelectedListener {
+        void onFriendSelected(long id);
+    }
 
     public static FriendsListFragment newInstance() {
         FriendsListFragment f = new FriendsListFragment();
@@ -66,6 +71,20 @@ public class FriendsListFragment extends Fragment implements View.OnClickListene
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof FriendSelectedListener) {
+            listener = (FriendSelectedListener)activity;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         IntentFilter filter = new IntentFilter(Constants.ACTION_LISTRESULT);
@@ -84,17 +103,11 @@ public class FriendsListFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        Activity a = getActivity();
-        if (a == null) {
-            return;
-        }
         if (v.getId() == R.id.container_single_giftlistitem) {
             // start detail activity
             ContactInformation info = (ContactInformation)v.getTag();
-            if (info != null) {
-                Intent intent = new Intent(a, FriendDetailActivity.class);
-                intent.putExtra("id", (info.id));
-                startActivity(intent);
+            if (info != null && listener != null) {
+                listener.onFriendSelected(info.id);
             }
         }
     }
