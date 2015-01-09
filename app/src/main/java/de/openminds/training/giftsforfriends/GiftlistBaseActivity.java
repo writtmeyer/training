@@ -16,15 +16,20 @@
 
 package de.openminds.training.giftsforfriends;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
+import android.content.IntentFilter;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class GiftlistBaseActivity extends ActionBarActivity {
+import de.openminds.training.giftsforfriends.domain.Post;
+
+public class GiftlistBaseActivity extends ActionBarActivity  {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -63,4 +68,30 @@ public class GiftlistBaseActivity extends ActionBarActivity {
         downloadIntent.setAction(action);
         startService(downloadIntent);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(localReceiver);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter(Constants.ACTION_DOWNLOADRESULT);
+        LocalBroadcastManager.getInstance(this).registerReceiver(localReceiver, filter);
+    }
+
+    // The Receiver to get the result from the service
+    BroadcastReceiver localReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (Constants.ACTION_DOWNLOADRESULT.equals(intent.getAction())) {
+                Post post = intent.getParcelableExtra(Constants.KEY_POST);
+                DialogFragment newFragment = DownloadResultDialogFragment.newInstance(post);
+                newFragment.show(getSupportFragmentManager(), "dialog");
+            }
+        }
+    };
+
 }

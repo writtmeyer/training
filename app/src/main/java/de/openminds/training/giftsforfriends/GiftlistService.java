@@ -21,10 +21,20 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
+import org.apache.commons.io.IOUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import de.openminds.training.giftsforfriends.data.Data;
 import de.openminds.training.giftsforfriends.domain.ContactInformation;
+import de.openminds.training.giftsforfriends.domain.Post;
 
 public class GiftlistService extends IntentService {
 
@@ -61,11 +71,44 @@ public class GiftlistService extends IntentService {
     }
 
     private void doDownloadAndroidWay() {
-        Log.v("training", "not yet implemented: downloading the stock Android way");
+        Log.v("training", "downloading the stock Android way");
+        URL url = null;
+        try {
+            // the following site offers some demo data
+            // This code downloads the post with id "2"
+            url = new URL("http://jsonplaceholder.typicode.com/posts/2");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            // for post methods you have to call "setDoOutput(true)",
+            // obtain tge OutputStream and write to it _before_
+            // getting the resonse code. See the following commented lines:
+//            conn.setDoOutput(true);
+//            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+//            String body = URLEncoder.encode("someKey=somevalue&someOtherKey=someOtherValue", StandardCharsets.UTF_8.name());
+//            writer.write(body);
+            Gson gson = new Gson();
+            int statuscode = conn.getResponseCode();
+            Post post;
+            if (statuscode == HttpURLConnection.HTTP_OK) {
+                InputStream in = conn.getInputStream();
+                String result = IOUtils.toString(in, "UTF-8");
+                post = gson.fromJson(result, Post.class);
+                Log.v("training", "result: " + result);
+                // transfer the result via broadcast:
+                Intent broadCastIntent = new Intent();
+                broadCastIntent.setAction(Constants.ACTION_DOWNLOADRESULT);
+                broadCastIntent.putExtra(Constants.KEY_POST, post);
+                LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
+                localBroadcastManager.sendBroadcast(broadCastIntent);
+            }
+        } catch (MalformedURLException e) {
+            Log.e("training", "URL invalid", e);
+        } catch (IOException e) {
+            Log.e("training", "Fehler beim Netzzugriff", e);
+        }
     }
 
     private void doDownloadIonWay() {
-        Log.v("training", "not yet implemented: downloading the Ion way");
+        Log.v("training", "not yet implemented - downloading the Ion way");
     }
 
     private void doLoadList(Intent intent) {

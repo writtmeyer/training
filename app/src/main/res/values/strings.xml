@@ -3,4 +3,8 @@
     <string name="add_gift">Add gift</string>
     <string name="action_download_normal">Download with stock Android means</string>
     <string name="action_download_ion">Download with Ion</string>
+    <string name="label_gift_id">Post ID</string>
+    <string name="label_gift_user_id">User ID</string>
+    <string name="label_gift_title">Post title</string>
+    <string name="label_gift_body">Post body</string>
 </resources>

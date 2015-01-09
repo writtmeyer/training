@@ -35,7 +35,6 @@ public class ContactInformation implements Parcelable {
         this.noOfGifts = gifts;
     }
 
-
     @Override
     public int describeContents() {
         return 0;
