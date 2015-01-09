@@ -2,6 +2,9 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- to be able to use the ToolBar you have to disable the Actionbar: -->
+        <item name="android:windowActionBar">false</item>
+        <item name="windowActionBar">false</item>
         <!-- Customize your theme here. -->
     </style>
 

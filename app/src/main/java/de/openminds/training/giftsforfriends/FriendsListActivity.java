@@ -16,22 +16,11 @@
 
 package de.openminds.training.giftsforfriends;
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
-
-import java.util.List;
-
-import de.openminds.training.giftsforfriends.domain.ContactInformation;
+import android.support.v7.widget.Toolbar;
 
 
 /////////////////////////////////////////////
@@ -45,7 +34,9 @@ import de.openminds.training.giftsforfriends.domain.ContactInformation;
 //
 /////////////////////////////////////////////
 
-public class FriendsListActivity extends FragmentActivity implements FriendsListFragment.FriendSelectedListener {
+public class FriendsListActivity
+        extends GiftlistBaseActivity
+        implements FriendsListFragment.FriendSelectedListener {
 
     private static String DETAILS_FRAGMENT_TAG = "friendsDetailsTag";
     private RecyclerView rv;
@@ -66,6 +57,11 @@ public class FriendsListActivity extends FragmentActivity implements FriendsList
                     beginTransaction().
                     replace(R.id.container_master_fragment, f).
                     commit();
+        }
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
     }
 

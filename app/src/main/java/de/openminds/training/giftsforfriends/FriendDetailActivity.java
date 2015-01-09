@@ -17,9 +17,10 @@
 package de.openminds.training.giftsforfriends;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.Toolbar;
 
-public class FriendDetailActivity extends FragmentActivity {
+public class FriendDetailActivity extends GiftlistBaseActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +33,12 @@ public class FriendDetailActivity extends FragmentActivity {
                     replace(R.id.container_detail_fragment, f).
                     commit();
         }
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
+
 }
 

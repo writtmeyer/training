@@ -13,7 +13,14 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".FriendDetailActivity" />
+        <activity
+            android:name=".FriendDetailActivity"
+            android:parentActivityName=".FriendsListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".FriendsListActivity" />
+        </activity>
+
         <service android:name=".GiftlistService" />
     </application>
 

@@ -30,6 +30,8 @@ public class GiftlistService extends IntentService {
 
     public static final String ACTION_LOAD_LIST = "loadList";
     public static final String ACTION_LOAD_DETAILS = "loadDetails";
+    public static final String ACTION_DOWNLOAD_STOCK = "actionDownloadStock";
+    public static final String ACTION_DOWNLOAD_ION = "actionDownloadIon";
 
     public GiftlistService() {
         super(GiftlistService.class.getName());
@@ -49,9 +51,21 @@ public class GiftlistService extends IntentService {
             doLoadList(intent);
         } else if (ACTION_LOAD_DETAILS.equals(action)) {
             doLoadDetails(intent);
+        } else if (ACTION_DOWNLOAD_STOCK.equals(action)) {
+            doDownloadAndroidWay();
+        } else if (ACTION_DOWNLOAD_ION.equals(action)) {
+            doDownloadIonWay();
         } else {
             throw new IllegalArgumentException("Unknown action: " + action);
         }
+    }
+
+    private void doDownloadAndroidWay() {
+        Log.v("training", "not yet implemented: downloading the stock Android way");
+    }
+
+    private void doDownloadIonWay() {
+        Log.v("training", "not yet implemented: downloading the Ion way");
     }
 
     private void doLoadList(Intent intent) {
