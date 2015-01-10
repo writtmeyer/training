@@ -22,15 +22,19 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 import org.apache.commons.io.IOUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import de.openminds.training.giftsforfriends.data.Data;
 import de.openminds.training.giftsforfriends.domain.ContactInformation;
@@ -91,24 +95,57 @@ public class GiftlistService extends IntentService {
             if (statuscode == HttpURLConnection.HTTP_OK) {
                 InputStream in = conn.getInputStream();
                 String result = IOUtils.toString(in, "UTF-8");
-                post = gson.fromJson(result, Post.class);
                 Log.v("training", "result: " + result);
-                // transfer the result via broadcast:
-                Intent broadCastIntent = new Intent();
-                broadCastIntent.setAction(Constants.ACTION_DOWNLOADRESULT);
-                broadCastIntent.putExtra(Constants.KEY_POST, post);
-                LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
-                localBroadcastManager.sendBroadcast(broadCastIntent);
+                post = gson.fromJson(result, Post.class);
+                transferPostToRecipients(post);
+
             }
         } catch (MalformedURLException e) {
             Log.e("training", "URL invalid", e);
         } catch (IOException e) {
-            Log.e("training", "Fehler beim Netzzugriff", e);
+            Log.e("training", "Problem with network access", e);
         }
     }
 
+    private void transferPostToRecipients(Post post) {
+        // transfer the result via broadcast:
+        Intent broadCastIntent = new Intent();
+        broadCastIntent.setAction(Constants.ACTION_DOWNLOADRESULT);
+        broadCastIntent.putExtra(Constants.KEY_POST, post);
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
+        localBroadcastManager.sendBroadcast(broadCastIntent);
+    }
+
     private void doDownloadIonWay() {
-        Log.v("training", "not yet implemented - downloading the Ion way");
+        Log.v("training", "downloading the Ion way");
+        // Ion makes loading network access that much easier
+        // It offers plenty of options. In the following code the result
+        // gets transformed to the domain object by Ion itself.
+        // Ion is also great to load images to ImageViews.
+        // More on Ion on the project page:
+        // https://github.com/koush/ion
+
+        // Even though Service is a context object itself you need
+        // to use the applicaztion context here. Otherwise your service might
+        // have stopped - thus your service might be gone - and you won't see
+        // any results since Ion couldn't send the broadcast.
+        Ion.with(this.getApplicationContext()).
+                load("http://jsonplaceholder.typicode.com/posts/2").
+                as(Post.class).
+                setCallback(new FutureCallback<Post>() {
+                    @Override
+                    public void onCompleted(Exception e, Post post) {
+                        if (e != null) {
+                            Log.e("dailword", "Problem loading post: " + e.getMessage(), e);
+                            return;
+                        }
+                        if (post == null) {
+                            Log.e("dailword", "Post is null in onCompleted() even though no exception was thrown");
+                            return;
+                        }
+                        transferPostToRecipients(post);
+                    }
+                });
     }
 
     private void doLoadList(Intent intent) {
