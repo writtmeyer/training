@@ -17,5 +17,7 @@
 
 <resources>
     <color name="selection_shade">#33000000</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
     <color name="accent">#ff009688</color>
 </resources>
