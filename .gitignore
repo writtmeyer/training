@@ -22,8 +22,6 @@ build
 #gradle
 .gradle
 local.properties
-gradlew
-gradlew.bat
 build/
 
 #vi

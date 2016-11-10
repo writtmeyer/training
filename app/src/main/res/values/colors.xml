@@ -16,6 +16,10 @@
   -->
 
 <resources>
-    <color name="selection_shade">#33000000</color>
-    <color name="accent">#ff009688</color>
+    <color name="primary">#3F51B5</color>
+    <color name="primaryDark">#303F9F</color>
+    <color name="accent">#00b5a5</color>
+    <color name="black_54">#8a000000</color>
+    <color name="accent_54">#8a80b5a5</color>
+    <color name="selection_shade">@color/black_54</color>
 </resources>
